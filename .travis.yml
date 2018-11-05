@@ -15,18 +15,18 @@ cache:
 script: "./gradlew clean build"
 
 before_install:
-  - chmod +x gradlew
+  - chmod +x gradlew # gradlew 명령 실행 전 권한 부여
 
 before_deploy:
 - zip -r mjq *
 - mkdir -p deploy
-- mv mjq.zip deploy/mjq.zip
+- mv mjq.zip deploy/mjq.zip # mjq.zip으로 압축하여 deploy 폴더 안에 넣기
 
 deploy:
 - provider: s3
   access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
   secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
-  bucket: mjq-deploy # 6-3-3에서 생성한 S3 버킷
+  bucket: mjq-deploy # S3 버킷
   region: ap-northeast-2
   local_dir: deploy
   skip_cleanup: true
@@ -36,8 +36,22 @@ deploy:
     repo: choish1919/mjq #Github 주소
     branch: master
 
+- provider: codedeploy
+  access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+  secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+  bucket: mjq-deploy # S3 버킷
+  key: mjq.zip # S3 버킷에 저장된 mjq.zip 파일을 EC2로 배포
+  bundle_type: zip
+  application: mjq # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션 이름
+  deployment_group: mjq-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹 이름
+  region: ap-northeast-2
+  wait-until-deployed: true
+  on:
+    repo: choish1919/mjq
+    branch: master
+
 # CI 실행 완료시 메일로 알람
 #notifications:
 #  email:
 #    recipients:
-#    - xxx@gmail.com
+#    - choish1919@gmail.com
