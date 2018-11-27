@@ -2,6 +2,7 @@ package com.choish.mjq.web;
 
 import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.domain.users.UserRepository;
+import com.choish.mjq.domain.users.UsersCreateRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,15 +20,8 @@ public class UserController {
     // CREATE
     // 사용자 이메일을 입력받아 새로운 User를 생성하고 그 결과를 반환
     @PostMapping("/create")
-    public Users createUser(@RequestParam String email, String pw, String nickname){
-        return userRepository.save(Users.builder()
-                .email(email)
-                .pw(pw)
-                .nickname(nickname)
-                .exp(new Long(0))
-                .lv(new Long(1))
-                .build()
-        );
+    public Users createUser(@RequestBody UsersCreateRequestDto dto){
+        return userRepository.save(dto.toEntity());
     }
 
     // READ
@@ -49,7 +43,6 @@ public class UserController {
     @PutMapping(value = "/{id}")
     public Users update(@PathVariable Long id, @RequestParam String nickname){
         Users user = userRepository.findById(id).get();
-        user.setNickname(nickname);
         return userRepository.save(user);
     }
 
