@@ -2,54 +2,57 @@ package com.choish.mjq.web;
 
 import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.domain.users.UserRepository;
-import com.choish.mjq.domain.users.UsersCreateRequestDto;
+import com.choish.mjq.dto.users.UsersCreateRequestDto;
+import com.choish.mjq.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
-
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository){
-        this.userRepository = userRepository;
+    public UserController(UserService userService){
+        this.userService = userService;
     }
 
-    // CREATE
+    // CREATE 가입
     // 사용자 이메일을 입력받아 새로운 User를 생성하고 그 결과를 반환
-    @PostMapping("/create")
-    public Users createUser(@RequestBody UsersCreateRequestDto dto){
-        return userRepository.save(dto.toEntity());
+    @PostMapping("/join")
+    public Users join(@RequestBody UsersCreateRequestDto dto){
+        return userService.join(dto);
+    }
+
+    @PostMapping("/login")
+    public Users login(@RequestHeader String authorization){
+        return userService.authentication(authorization);
     }
 
     // READ
     // 모든 사용자 리스트를 반환
     @GetMapping
     public Iterable<Users> list(){
-        return userRepository.findAll();
+        return userService.userList();
     }
 
     // READ
     // 해당 ID의 사용자를 반환
     @GetMapping(value = "/{id}")
     public Users findById(@PathVariable Long id){
-        return userRepository.findById(id).get();
+        return userService.findById(id);
     }
 
-    // UPDATE
-    // 해당 ID의 사용자 이름을 갱신한 뒤 그 결과를 반환
-    @PutMapping(value = "/{id}")
-    public Users update(@PathVariable Long id, @RequestParam String nickname){
-        Users user = userRepository.findById(id).get();
-        return userRepository.save(user);
+    // 자신의 정보를 반환
+    @GetMapping(value = "/me")
+    public Users getMe(@RequestHeader String authorization){
+        return userService.authentication(authorization);
     }
 
     // DELETE
     // 해당 ID의 사용자를 삭제
     @DeleteMapping
-    public void delete(@RequestParam Long id) {
-        userRepository.deleteById(id);
+    public void quit(@RequestHeader String authorization){
+        userService.quit(authorization);
     }
 }

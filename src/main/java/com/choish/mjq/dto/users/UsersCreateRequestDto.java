@@ -1,6 +1,7 @@
-package com.choish.mjq.domain.users;
+package com.choish.mjq.dto.users;
 
 import com.choish.mjq.domain.posts.Posts;
+import com.choish.mjq.domain.users.Users;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
