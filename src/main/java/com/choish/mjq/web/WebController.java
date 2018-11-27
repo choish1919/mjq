@@ -16,10 +16,4 @@ public class WebController {
     public String main(Model model){
         return "main";
     }
-
-    @GetMapping("/users/create")
-    public String createUser(Model model){
-        //model.addAttribute("nickname", userRepository.findById(new Long(1)).get().getNickname());
-        return "createUser";
-    }
 }

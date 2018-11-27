@@ -26,13 +26,11 @@ public class UserService {
         return userRepository.save(dto.toEntity());
     }
 
-    // READ
     // 모든 사용자 리스트를 반환
     public Iterable<Users> userList(){
         return userRepository.findAll();
     }
 
-    // READ
     // 해당 ID의 사용자를 반환
     public Users findById(Long id){
         return userRepository.findById(id).get();
