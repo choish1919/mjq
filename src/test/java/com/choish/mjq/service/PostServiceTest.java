@@ -1,4 +1,4 @@
-package com.choish.mjq.service;
+/*package com.choish.mjq.service;
 
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.domain.posts.PostsRepository;
@@ -45,4 +45,4 @@ public class PostServiceTest {
         assertThat(posts.getContent()).isEqualTo(dto.getContent());
         assertThat(posts.getTitle()).isEqualTo(dto.getTitle());
     }
-}
+}*/
