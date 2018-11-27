@@ -26,15 +26,15 @@ public class Users {
     private Long exp;
     private Long lv;
 
-    public Users(String email, String pw, String nickname){
+    /*public Users(String email, String pw, String nickname){
         this.email = email;
         this.pw = pw;
         this.nickname = nickname;
         this.exp = new Long(0);
         this.lv = new Long(1);
-    }
+    }*/
 
-    /*@Builder // 해당 클래스의 빌더패턴 클래스 생성
+    @Builder // 해당 클래스의 빌더패턴 클래스 생성
     // 실제 DB의 테이블과 매칭되는 클래스로서, Entity 클래스라고 함
     public Users(Long id, String email, String pw, String nickname, Long exp, Long lv){
         this.id = id;
@@ -43,5 +43,5 @@ public class Users {
         this.nickname = nickname;
         this.exp = exp;
         this.lv = lv;
-    }*/
+    }
 }
