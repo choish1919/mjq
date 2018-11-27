@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local # 기본 환경 선택
+    active: set1 # 기본 환경 선택
   jpa:
     properties:
       hibernate:
@@ -20,15 +20,19 @@ spring:
     console:
       enabled: true
 
+# 운영 DB
+---
+spring:
+  profiles: real-db
+  datasource:
+    url: jdbc:mariadb://mjqdb.cltkdf16bdne.ap-northeast-2.rds.amazonaws.com:3306/mjqdb
+    username: choish1919
+    password: mjqislab235711
+    driver-class-name: org.mariadb.jdbc.Driver
+
 # 운영 환경
 ---
 spring.profiles: set1
 spring.profiles.include: real-db
 server:
   port: 8081
-
----
-spring.profiles: set2
-spring.profiles.include: real-db
-server:
-  port: 8082
