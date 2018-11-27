@@ -1,7 +1,8 @@
 package com.choish.mjq.web;
 
 import com.choish.mjq.domain.posts.Posts;
-import com.choish.mjq.domain.posts.PostsSaveRequestDto;
+import com.choish.mjq.dto.posts.PostsSaveRequestDto;
+import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
 import com.choish.mjq.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,15 @@ public class PostController {
         return postService.findById(id);
     }
 
+    // 해당 게시물 수정
+    @PutMapping(value = "/{id}")
+    public Posts update(@PathVariable Long id, @RequestHeader String authorization, @RequestBody PostsUpdateRequestDto dto){
+        return postService.update(id, authorization, dto);
+    }
+
+    // 해당 게시물을 삭제
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id){
-        postService.deleteById(id);
+    public void delete(@PathVariable Long id, @RequestHeader String authorization){
+        postService.deleteById(id, authorization);
     }
 }

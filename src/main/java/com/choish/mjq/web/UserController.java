@@ -45,6 +45,11 @@ public class UserController {
         return userService.authentication(authorization);
     }
 
+    // 정보 수정
+    //@PutMapping
+    //public Users update(@RequestHeader String authorization) { return userService.update}
+
+
     // 해당 ID의 사용자를 삭제
     @DeleteMapping
     public void quit(@RequestHeader String authorization){

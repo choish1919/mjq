@@ -25,9 +25,11 @@ public class Users {
     @Column(length = 41, unique = true, nullable = false)
     private String email;
 
+    private String achievements;
+
     @Builder // 해당 클래스의 빌더패턴 클래스 생성
     // 실제 DB의 테이블과 매칭되는 클래스로서, Entity 클래스라고 함
-    public Users(String email, String pw, String nickname, Long exp, Long lv){
+    public Users(String email, String pw, String nickname, Long exp, Long lv, String achievements){
         this.email = email;
         this.pw = pw;
         this.nickname = nickname;
