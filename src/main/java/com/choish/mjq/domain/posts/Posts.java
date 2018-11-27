@@ -1,6 +1,5 @@
 package com.choish.mjq.domain.posts;
 
-
 import com.choish.mjq.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
