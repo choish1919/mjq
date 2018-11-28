@@ -1,4 +1,4 @@
-package com.choish.mjq.web;
+package com.choish.mjq.controller;
 
 import com.choish.mjq.domain.users.UserRepository;
 import lombok.AllArgsConstructor;
