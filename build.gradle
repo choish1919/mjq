@@ -35,7 +35,7 @@ dependencies {
     runtimeOnly('com.h2database:h2')
     compileOnly('org.projectlombok:lombok')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    compile("org.mariadb.jdbc:mariadb-java-client")
-    compile("io.springfox:springfox-swagger2:2.6.1")
-    compile("io.springfox:springfox-swagger-ui:2.6.1")
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+    implementation("io.springfox:springfox-swagger2:2.9.2")
+    implementation("io.springfox:springfox-swagger-ui:2.9.2")
 }

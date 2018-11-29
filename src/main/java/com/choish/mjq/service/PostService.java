@@ -1,13 +1,18 @@
 package com.choish.mjq.service;
 
+import com.choish.mjq.controller.WebRestController;
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.domain.posts.PostsRepository;
+import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.dto.posts.PostsSaveRequestDto;
 import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
 import com.choish.mjq.exception.UnauthorizedException;
+import com.sun.deploy.net.HttpResponse;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.util.List;
 
