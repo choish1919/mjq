@@ -1,7 +1,6 @@
 package com.choish.mjq.domain.posts;
 
 import lombok.*;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.persistence.*;
 
