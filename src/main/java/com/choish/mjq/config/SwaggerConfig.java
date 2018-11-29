@@ -1,4 +1,4 @@
-package com.choish.mjq.config;
+/*package com.choish.mjq.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,3 +33,4 @@ public class SwaggerConfig {
                 .build();
     }
 }
+*/
