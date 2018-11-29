@@ -1,11 +1,10 @@
 package com.choish.mjq.controller;
 
 import com.choish.mjq.domain.posts.Posts;
-import com.choish.mjq.domain.posts.PostsSaveRequestDto;
+import com.choish.mjq.dto.posts.PostsSaveRequestDto;
 import com.choish.mjq.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @RestController
 @RequestMapping(value = "/posts")
@@ -36,7 +35,7 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id){
-        postService.deleteById(id);
+    public void delete(@PathVariable Long id, String credential){
+        postService.deleteById(id, credential);
     }
 }
