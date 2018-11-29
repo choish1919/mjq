@@ -39,7 +39,7 @@ public class UserService {
     // 인증 & 개인정보 조회
     public Users authentication(String token){
         try {
-            // authorization으로부터 type과 credential을 분리
+            // authorization으로부터 type과 ccredential을 분리
             String[] split = token.split(" ");
             String type = split[0];
             String credential = split[1];
