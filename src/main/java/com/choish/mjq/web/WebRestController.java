@@ -1,4 +1,4 @@
-package com.choish.mjq.controller;
+package com.choish.mjq.web;
 
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -12,8 +12,8 @@ public class WebRestController {
 
     private Environment env;
 
-    @GetMapping("/notice")
-    public String notice(){
+    @GetMapping("/hello")
+    public String hello(){
         return "Hello World";
     }
 

@@ -1,4 +1,4 @@
-package com.choish.mjq.controller;
+package com.choish.mjq.web;
 
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.dto.posts.PostsSaveRequestDto;
