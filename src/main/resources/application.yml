@@ -6,6 +6,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
+
 # local 환경
 ---
 spring:

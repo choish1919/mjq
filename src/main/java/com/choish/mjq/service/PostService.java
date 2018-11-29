@@ -6,6 +6,8 @@ import com.choish.mjq.dto.posts.PostsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
 import com.choish.mjq.exception.UnauthorizedException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
@@ -24,6 +26,12 @@ public class PostService {
     // 모든 게시물 리스트를 반환
     public List<Posts> postList(){
         return postsRepository.findAllByOrderByIdDesc();
+    }
+
+    // 해당 페이지 반환
+    public List<Posts> postPage(PageRequest pageRequest){
+        Page<Posts> postsPage = postsRepository.findAllByOrderByIdDesc(pageRequest);
+        return postsPage.getContent();
     }
 
     // 해당 ID의 게시물을 반환

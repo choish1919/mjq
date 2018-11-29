@@ -4,6 +4,7 @@ import com.choish.mjq.domain.notices.Notices;
 import com.choish.mjq.dto.notices.NoticesCreateRequestDto;
 import com.choish.mjq.service.NoticeService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +17,20 @@ public class NoticeController {
     private NoticeService noticeService;
 
     // 모든 공지사항 리스트를 반환
-    @GetMapping
+    @GetMapping("/all")
     public List<Notices> noticesList(){
         return noticeService.noticeList();
     }
 
+    // 해당 페이지, size 만큼 반환
+    @GetMapping
+    public List<Notices> postPage(@RequestParam int page, int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return noticeService.noticePage(pageRequest);
+    }
+
     // 해당 번호의 공지사항 리스트 반환
-    @GetMapping("id}")
+    @GetMapping("{id}")
     public Notices noticesList(@PathVariable Long id){
         return noticeService.findNoticeById(id);
     }

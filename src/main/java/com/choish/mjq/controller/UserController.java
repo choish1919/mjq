@@ -43,6 +43,6 @@ public class UserController {
     // 해당 ID의 사용자를 삭제
     @DeleteMapping
     public void quit(@RequestHeader String authorization){
-        userService.quit(authorization);
+        userService.withdraw(authorization);
     }
 }

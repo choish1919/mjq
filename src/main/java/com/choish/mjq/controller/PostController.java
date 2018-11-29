@@ -5,7 +5,11 @@ import com.choish.mjq.dto.posts.PostsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
 import com.choish.mjq.service.PostService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -20,9 +24,16 @@ public class PostController {
     }
 
     // 모든 게시물 리스트를 반환
-    @GetMapping
+    @GetMapping("/all")
     public Iterable<Posts> postList(){
         return postService.postList();
+    }
+
+    // 해당 페이지, size 만큼 반환
+    @GetMapping
+    public List<Posts> postPage(@RequestParam int page, int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postService.postPage(pageRequest);
     }
 
     // 해당 ID의 게시물을 반환

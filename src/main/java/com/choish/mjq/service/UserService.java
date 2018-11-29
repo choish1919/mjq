@@ -34,7 +34,7 @@ public class UserService {
         return userRepository.findById(id).get();
     }
 
-    // 인증 & 개인정보 조회
+    // 인증
     public Users authentication(String token){
         try {
             // authorization으로부터 type과 credential을 분리
@@ -61,7 +61,7 @@ public class UserService {
     }
 
     //탈퇴
-    public void quit(String token){
+    public void withdraw(String token){
         Users users = this.authentication(token);
         userRepository.delete(users);
     }
