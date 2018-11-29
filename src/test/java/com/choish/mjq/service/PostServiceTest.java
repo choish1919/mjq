@@ -2,7 +2,7 @@
 
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.domain.posts.PostsRepository;
-import com.choish.mjq.dto.posts.PostsSaveRequestDto;
+import com.choish.mjq.domain.posts.PostsSaveRequestDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
