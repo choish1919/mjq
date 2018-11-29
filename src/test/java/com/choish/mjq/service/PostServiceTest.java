@@ -2,7 +2,7 @@
 
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.domain.posts.PostsRepository;
-import com.choish.mjq.domain.posts.PostsSaveRequestDto;
+import com.choish.mjq.domain.posts.PostsCreateRequestDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +30,7 @@ public class PostServiceTest {
     @Test
     public void Dto데이터가_posts테이블에_저장된다(){
         //given
-        PostsSaveRequestDto dto = PostsSaveRequestDto.builder()
+        PostsCreateRequestDto dto = PostsCreateRequestDto.builder()
                 .author("choish1919@gmail.com")
                 .content("테스트")
                 .title("테스트 타이틀")

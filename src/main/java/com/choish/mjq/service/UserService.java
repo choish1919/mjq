@@ -5,18 +5,16 @@ import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.domain.users.UserRepository;
 import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.dto.users.UsersCreateRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
+import java.util.List;
+
 @Service
+@AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
 
     // 가입
     public Users join(UsersCreateRequestDto dto){
@@ -27,8 +25,8 @@ public class UserService {
     }
 
     // 모든 사용자 리스트를 반환
-    public Iterable<Users> userList(){
-        return userRepository.findAll();
+    public List<Users> userList(){
+        return userRepository.findAllByOrderByIdDesc();
     }
 
     // 해당 ID의 사용자를 반환
@@ -39,7 +37,7 @@ public class UserService {
     // 인증 & 개인정보 조회
     public Users authentication(String token){
         try {
-            // authorization으로부터 type과 ccredential을 분리
+            // authorization으로부터 type과 credential을 분리
             String[] split = token.split(" ");
             String type = split[0];
             String credential = split[1];

@@ -1,20 +1,16 @@
-package com.choish.mjq.web;
+package com.choish.mjq.controller;
 
 import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.dto.users.UsersCreateRequestDto;
 import com.choish.mjq.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping(value = "/users")
 public class UserController {
     private UserService userService;
-
-    @Autowired
-    public UserController(UserService userService){
-        this.userService = userService;
-    }
 
     // 사용자 이메일을 입력받아 새로운 User를 생성하고 그 결과를 반환
     @PostMapping("/join")
@@ -22,6 +18,7 @@ public class UserController {
         return userService.join(dto);
     }
 
+    // 로그인 인증
     @PostMapping("/login")
     public Users login(@RequestHeader String authorization){
         return userService.authentication(authorization);
@@ -39,11 +36,9 @@ public class UserController {
         return userService.findById(id);
     }
 
-    // 자신의 정보를 반환
-    @GetMapping(value = "/me")
-    public Users getMe(@RequestHeader String authorization){
-        return userService.authentication(authorization);
-    }
+    // 정보 수정
+    //@PutMapping
+    //public Users update(@RequestHeader String authorization) { return userService.update }
 
     // 해당 ID의 사용자를 삭제
     @DeleteMapping

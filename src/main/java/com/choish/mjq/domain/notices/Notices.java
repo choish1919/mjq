@@ -1,4 +1,4 @@
-package com.choish.mjq.domain.posts;
+package com.choish.mjq.domain.notices;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter // 클래스 내 모든 필드의 Getter 메소드를 자동 생성
 @Setter // Setter 자동 생성
 @Entity // 테이블과 링크될 클래스임을 나타냄, _으로 이름을 매칭
-public class Posts {
+public class Notices {
 
     @Id // 해당 테이블의 PK 필드를 나타냄
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK의 생성 규칙
@@ -20,24 +20,15 @@ public class Posts {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    private String author;
-
-    private Long reward;
-
-    private Long authorid;
-
     private String created_date;
 
     private String modified_date;
 
     @Builder // 해당 클래스의 빌더패턴 클래스 생성
     // 실제 DB의 테이블과 매칭되는 클래스로서, Entity 클래스라고 함
-    public Posts(String title, String content, String author, Long reward, Long authorid, String created_date, String modified_date){
+    public Notices(String title, String content, String created_date, String modified_date){
         this.title = title;
         this.content = content;
-        this.author = author;
-        this.reward = reward;
-        this.authorid = authorid;
         this.created_date = created_date;
         this.modified_date = modified_date;
     }
