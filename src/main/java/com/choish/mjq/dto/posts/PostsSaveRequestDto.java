@@ -1,5 +1,6 @@
-package com.choish.mjq.domain.posts;
+package com.choish.mjq.dto.posts;
 
+import com.choish.mjq.domain.posts.Posts;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,12 +37,5 @@ public class PostsSaveRequestDto {
                 .reward(reward)
                 .authorid(authorid)
                 .build();
-    }
-
-    private String toStringDateTime(LocalDateTime localDateTime){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return Optional.ofNullable(localDateTime)
-                .map(formatter::format)
-                .orElse("");
     }
 }
