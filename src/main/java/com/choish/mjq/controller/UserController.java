@@ -37,11 +37,12 @@ public class UserController {
 
     // 계정 인증 메일 보내기
     @PostMapping("/register/send")
-    public void registerMail(@RequestBody EmailsSaveRequestDto dto){
+    public Emails registerMail(@RequestBody EmailsSaveRequestDto dto){
+        if(!dto.getEmail().contains("@"))  throw new UnauthorizedException("이메일 형식이 아닙니다.");
         String domain = dto.getEmail().split("@")[1];
         if(!domain.equals("mju.ac.kr") && !domain.equals("gmail.com"))
             throw new UnauthorizedException("유효하지 않은 도메인입니다.");
-        mailService.sendEmail(dto);
+        return mailService.sendEmail(dto);
     }
 
     // 계정 인증 메일 인증

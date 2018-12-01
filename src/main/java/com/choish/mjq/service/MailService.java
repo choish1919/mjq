@@ -1,5 +1,6 @@
 package com.choish.mjq.service;
 
+import com.choish.mjq.domain.emails.Emails;
 import com.choish.mjq.dto.emails.EmailsSaveRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -15,7 +16,7 @@ public class MailService {
     private JavaMailSender javaMailSender;
     Environment env;
 
-    public void sendEmail(EmailsSaveRequestDto dto) throws MailException {
+    public Emails sendEmail(EmailsSaveRequestDto dto) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
         String email = dto.getEmail();
         String name = email.split("@")[0];
@@ -27,5 +28,6 @@ public class MailService {
         mail.setSubject("명지퀘스트 계정 등록 확인 메일입니다.");
         mail.setText("안녕하세요." + name + "님!\n\n등록을 완료하시려면 아래의 링크를 클릭해주세요.\n\n"+ serviceDomain +"users/register/"+token);
         javaMailSender.send(mail);
+        return dto.toEntity();
     }
 }
