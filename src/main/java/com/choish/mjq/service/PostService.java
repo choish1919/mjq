@@ -49,11 +49,9 @@ public class PostService {
             Long authorId = Long.parseLong(decoded);
 
             posts = postsRepository.findById(id).get();
-
-            if (posts.getAuthorid() != authorId) throw new UnauthorizedException("Invalid credential");
-
+            if (posts.getAuthorid() != authorId) throw new UnauthorizedException("작성자만 수정 및 삭제가 가능합니다.");
         } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
-            throw new UnauthorizedException("Invalid credentials");
+            throw new UnauthorizedException("유효하지 않은 접근입니다.");
         }
     }
 

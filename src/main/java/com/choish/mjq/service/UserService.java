@@ -1,5 +1,6 @@
 package com.choish.mjq.service;
 
+import com.choish.mjq.domain.emails.EmailsRepository;
 import com.choish.mjq.exception.AlreadyExistsException;
 import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.domain.users.UserRepository;
@@ -15,12 +16,15 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
+    private EmailsRepository emailsRepository;
 
     // 가입
-    public Users join(UsersCreateRequestDto dto){
+    public Users register(UsersCreateRequestDto dto){
         Users users = userRepository.findByEmail(dto.getEmail());
         if(users != null)
             throw new AlreadyExistsException("이미 존재하는 이메일입니다.");
+        if(!emailsRepository.findById(dto.getEmail()).isPresent())
+            throw new UnauthorizedException("인증되지 않은 이메일입니다.");
         return userRepository.save(dto.toEntity());
     }
 
@@ -41,7 +45,6 @@ public class UserService {
             String[] split = token.split(" ");
             String type = split[0];
             String credential = split[1];
-
             Users users = null;
 
             if ("Basic".equalsIgnoreCase(type)) {
@@ -50,13 +53,13 @@ public class UserService {
                 String[] emailAndPassword = decoded.split(":");
 
                 users = userRepository.findByEmailAndPw(emailAndPassword[0], emailAndPassword[1]);
-                if (users == null) throw new UnauthorizedException("Invalid credential");
+                if (users == null) throw new UnauthorizedException("아이디 또는 비밀번호가 일치하지 않습니다.");
                 return users;
             } else {
-                throw new UnauthorizedException("Unsupported type: " + type);
+                throw new UnauthorizedException("지원하지 않는 타입의 Authorization: " + type);
             }
         } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
-            throw new UnauthorizedException("Invliad credentials");
+            throw new UnauthorizedException("유효하지 않은 접근입니다.");
         }
     }
 

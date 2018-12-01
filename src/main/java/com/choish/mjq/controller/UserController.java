@@ -1,9 +1,15 @@
 package com.choish.mjq.controller;
 
+import com.choish.mjq.domain.emails.Emails;
+import com.choish.mjq.domain.emails.EmailsRepository;
 import com.choish.mjq.domain.users.Users;
+import com.choish.mjq.dto.emails.EmailsSaveRequestDto;
 import com.choish.mjq.dto.users.UsersCreateRequestDto;
+import com.choish.mjq.exception.UnauthorizedException;
+import com.choish.mjq.service.MailService;
 import com.choish.mjq.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,11 +17,36 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/users")
 public class UserController {
     private UserService userService;
+    private MailService mailService;
+
+    private EmailsRepository emailsRepository;
 
     // 사용자 이메일을 입력받아 새로운 User를 생성하고 그 결과를 반환
-    @PostMapping("/join")
-    public Users join(@RequestBody UsersCreateRequestDto dto){
-        return userService.join(dto);
+    @PostMapping("/register")
+    public Users register(@RequestBody UsersCreateRequestDto dto){
+        return userService.register(dto);
+    }
+
+    // 계정 인증 메일 보내기
+    @PostMapping("/register/send")
+    public void registerMail(@RequestBody EmailsSaveRequestDto dto){
+       mailService.sendEmail(dto);
+    }
+
+    // 계정 인증 메일 인증
+    @GetMapping(value = "/register/{token}")
+    public String registerMailAuth(@PathVariable String token){
+        try {
+            String decoded = new String(Base64Utils.decodeFromString(token));
+            String domain = (decoded.split("@")[1]).split(":")[0];
+            String email = decoded.split(":")[0];
+            if(!domain.equals("mju.ac.kr") && !domain.equals("gmail.com")) throw new UnauthorizedException("유효하지 않은 도메인입니다.");
+            if(emailsRepository.findById(email).isPresent()) throw new UnauthorizedException("이미 인증 받은 이메일입니다. 가입을 진행해주세요.");
+            emailsRepository.save(Emails.builder().email(email).build());
+            return "이메일 인증이 완료되었습니다. 인증 받은 이메일로 가입을 진행해주세요.";
+        } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
+            throw new UnauthorizedException("유효하지 않은 토큰입니다.");
+        }
     }
 
     // 로그인 인증
