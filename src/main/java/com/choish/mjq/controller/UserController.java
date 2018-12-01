@@ -2,9 +2,11 @@ package com.choish.mjq.controller;
 
 import com.choish.mjq.domain.emails.Emails;
 import com.choish.mjq.domain.emails.EmailsRepository;
+import com.choish.mjq.domain.users.UserRepository;
 import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.dto.emails.EmailsSaveRequestDto;
 import com.choish.mjq.dto.users.UsersCreateRequestDto;
+import com.choish.mjq.exception.AlreadyExistsException;
 import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.service.MailService;
 import com.choish.mjq.service.UserService;
@@ -20,17 +22,26 @@ public class UserController {
     private MailService mailService;
 
     private EmailsRepository emailsRepository;
+    private UserRepository userRepository;
 
     // 사용자 이메일을 입력받아 새로운 User를 생성하고 그 결과를 반환
     @PostMapping("/register")
     public Users register(@RequestBody UsersCreateRequestDto dto){
+        Users users = userRepository.findByEmail(dto.getEmail());
+        if(users != null)
+            throw new AlreadyExistsException("이미 존재하는 이메일입니다.");
+        if(!emailsRepository.findById(dto.getEmail()).isPresent())
+            throw new UnauthorizedException("인증되지 않은 이메일입니다.");
         return userService.register(dto);
     }
 
     // 계정 인증 메일 보내기
     @PostMapping("/register/send")
     public void registerMail(@RequestBody EmailsSaveRequestDto dto){
-       mailService.sendEmail(dto);
+        String domain = dto.getEmail().split("@")[1];
+        if(!domain.equals("mju.ac.kr") && !domain.equals("gmail.com"))
+            throw new UnauthorizedException("유효하지 않은 도메인입니다.");
+        mailService.sendEmail(dto);
     }
 
     // 계정 인증 메일 인증

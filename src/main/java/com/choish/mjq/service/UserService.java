@@ -1,7 +1,6 @@
 package com.choish.mjq.service;
 
 import com.choish.mjq.domain.emails.EmailsRepository;
-import com.choish.mjq.exception.AlreadyExistsException;
 import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.domain.users.UserRepository;
 import com.choish.mjq.domain.users.Users;
@@ -20,11 +19,6 @@ public class UserService {
 
     // 가입
     public Users register(UsersCreateRequestDto dto){
-        Users users = userRepository.findByEmail(dto.getEmail());
-        if(users != null)
-            throw new AlreadyExistsException("이미 존재하는 이메일입니다.");
-        if(!emailsRepository.findById(dto.getEmail()).isPresent())
-            throw new UnauthorizedException("인증되지 않은 이메일입니다.");
         return userRepository.save(dto.toEntity());
     }
 

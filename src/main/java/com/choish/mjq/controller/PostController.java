@@ -3,6 +3,7 @@ package com.choish.mjq.controller;
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.dto.posts.PostsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
+import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,8 @@ public class PostController {
     // 게시물 작성
     @PostMapping
     public Posts write(@RequestBody PostsCreateRequestDto dto){
+        if(dto.getAuthor() == null || dto.getContent() == null || dto.getTitle() == null || dto.getReward() == null || dto.getAuthorid() == null || dto.getCreated_date() == null)
+            throw new UnauthorizedException("DTO가 유효하지 않습니다. 다음 중 NULL 값이 존재하면 안됩니다.: " + dto.toString());
         return postService.postWrite(dto);
     }
 
