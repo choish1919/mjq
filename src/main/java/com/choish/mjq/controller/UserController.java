@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/users")
@@ -42,6 +44,8 @@ public class UserController {
         String domain = dto.getEmail().split("@")[1];
         if(!domain.equals("mju.ac.kr") && !domain.equals("gmail.com"))
             throw new UnauthorizedException("유효하지 않은 도메인입니다.");
+        if(emailsRepository.findByEmail(dto.getEmail()) != null)
+            throw new AlreadyExistsException("이미 인증된 이메일입니다.");
         return mailService.sendEmail(dto);
     }
 
@@ -49,11 +53,26 @@ public class UserController {
     @GetMapping(value = "/register/{token}")
     public String registerMailAuth(@PathVariable String token){
         try {
+            // 5분 테스트용을 30초
+            long expire = 30000;
             String decoded = new String(Base64Utils.decodeFromString(token));
             String domain = (decoded.split("@")[1]).split(":")[0];
             String email = decoded.split(":")[0];
-            if(!domain.equals("mju.ac.kr") && !domain.equals("gmail.com")) throw new UnauthorizedException("유효하지 않은 도메인입니다.");
-            if(emailsRepository.findById(email).isPresent()) throw new UnauthorizedException("이미 인증 받은 이메일입니다. 가입을 진행해주세요.");
+            long timestamp = Long.parseLong((decoded.split("@")[1]).split(":")[1]);
+            long elapsed = new Date().getTime() - timestamp;
+            if(!domain.equals("mju.ac.kr") && !domain.equals("gmail.com")) {
+                return "유효하지 않은 도메인입니다.";
+                //throw new UnauthorizedException("유효하지 않은 도메인입니다.");
+            }
+            if(emailsRepository.findById(email).isPresent()) {
+                return "이미 인증 받은 이메일입니다.\n가입을 진행해주세요.";
+                //throw new UnauthorizedException("이미 인증 받은 이메일입니다. 가입을 진행해주세요.");
+            }
+            // 시간이 경과하면
+            if(elapsed > expire) {
+                return "토큰이 만료되었습니다.\n5분 이내에 인증을 완료하여야 합니다.\n다시 인증 메일을 발송해주세요.\n\n경과 시간: "+ (elapsed/1000) / 60 + "분 " + ((elapsed/1000)%60) + "초";
+                //throw new UnauthorizedException("인증 시간이 만료되었습니다. 5분 이내에 인증을 완료하여야 합니다. 다시 인증 메일을 발송해주세요.");
+            }
             emailsRepository.save(Emails.builder().email(email).build());
             return "이메일 인증이 완료되었습니다. 인증 받은 이메일로 가입을 진행해주세요.";
         } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {

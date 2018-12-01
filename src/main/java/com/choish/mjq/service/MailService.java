@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
+import java.util.Date;
+
 @Service
 @AllArgsConstructor
 public class MailService {
@@ -20,7 +22,7 @@ public class MailService {
         SimpleMailMessage mail = new SimpleMailMessage();
         String email = dto.getEmail();
         String name = email.split("@")[0];
-        String token = Base64Utils.encodeToString((email +":mjuquest").getBytes());
+        String token = Base64Utils.encodeToString((email +":"+new Date().getTime()).getBytes());
         final String serviceDomain = "http://ec2-52-79-227-73.ap-northeast-2.compute.amazonaws.com:8080/";
         final String localDomain = "http://localhost:8080/";
         mail.setTo(email);
