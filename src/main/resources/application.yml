@@ -1,6 +1,6 @@
 # 기본 환경
 spring:
-  profiles.active: local
+  profiles.active: set1
   jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
 # local 환경
@@ -14,3 +14,33 @@ spring:
   h2:
     console:
       enabled: true
+
+# 운영 DB
+---
+spring:
+  profiles: real-db
+  datasource:
+    url: jdbc:mariadb://mjqdb.cltkdf16bdne.ap-northeast-2.rds.amazonaws.com:3306/mjqdb
+    username: choish1919
+    password: mjqislab235711
+    driver-class-name: org.mariadb.jdbc.Driver
+
+# Gmail SMTP
+---
+spring:
+  profiles: real-smtp
+  mail:
+    host: smtp.gmail.com
+    username: mjquest.noreply@gmail.com
+    password: mjquest1234!@#$
+    properties.mail.smtp:
+      auth: true
+      socketFactory:
+        port: 465
+        class: javax.net.ssl.SSLSocketFactory
+        fallback: false
+
+# 운영 환경
+---
+spring.profiles: set1
+spring.profiles.include: real-db, real-smtp
