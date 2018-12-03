@@ -1,6 +1,8 @@
 package com.choish.mjq.service;
 
-import com.choish.mjq.domain.emails.EmailsRepository;
+import com.choish.mjq.domain.matchings.Matchings;
+import com.choish.mjq.domain.matchings.MatchingsRepository;
+import com.choish.mjq.dto.matchings.MatchingsSaveRequestDto;
 import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.domain.users.UserRepository;
 import com.choish.mjq.domain.users.Users;
@@ -9,13 +11,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
-import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
-    private EmailsRepository emailsRepository;
+    private MatchingsRepository matchingsRepository;
 
     // 가입
     public Users register(UsersCreateRequestDto dto){
@@ -23,7 +24,7 @@ public class UserService {
     }
 
     // 모든 사용자 리스트를 반환
-    public List<Users> userList(){
+    public Iterable<Users> userList(){
         return userRepository.findAllByOrderByIdDesc();
     }
 
@@ -31,6 +32,12 @@ public class UserService {
     public Users findById(Long id){
         return userRepository.findById(id).get();
     }
+
+    // 해당 Applicants를 수락하였을때
+    public Matchings accept(MatchingsSaveRequestDto dto){ return matchingsRepository.save(dto.toEntity()); }
+
+    // 현재 매칭 정보를 반환
+    public Iterable<Matchings> matchingsList(Long id){return matchingsRepository.findAllByAuthorid(id);}
 
     // 인증
     public Users authentication(String token){

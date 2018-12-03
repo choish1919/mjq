@@ -1,7 +1,10 @@
 package com.choish.mjq.service;
 
+import com.choish.mjq.domain.applicants.Applicants;
+import com.choish.mjq.domain.applicants.ApplicantsRepository;
 import com.choish.mjq.domain.posts.Posts;
 import com.choish.mjq.domain.posts.PostsRepository;
+import com.choish.mjq.dto.applicants.ApplicantsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
 import com.choish.mjq.exception.UnauthorizedException;
@@ -11,25 +14,29 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class PostService {
     private PostsRepository postsRepository;
+    private ApplicantsRepository applicantsRepository;
 
     // 게시물 작성
     public Posts postWrite(PostsCreateRequestDto dto){
         return postsRepository.save(dto.toEntity());
     }
 
+    // 모집 신청
+    public Applicants apply(ApplicantsCreateRequestDto dto){
+        return applicantsRepository.save(dto.toEntity());
+    }
+
     // 모든 게시물 리스트를 반환
-    public List<Posts> postList(){
+    public Iterable<Posts> postList(){
         return postsRepository.findAllByOrderByIdDesc();
     }
 
     // 해당 페이지 반환
-    public List<Posts> postPage(PageRequest pageRequest){
+    public Iterable<Posts> postPage(PageRequest pageRequest){
         Page<Posts> postsPage = postsRepository.findAllByOrderByIdDesc(pageRequest);
         return postsPage.getContent();
     }
@@ -38,6 +45,9 @@ public class PostService {
     public Posts findPostById(Long id){
         return postsRepository.findById(id).get();
     }
+
+    // 해당 ID의 게시물의 Applicants List를 반환
+    public Iterable<Applicants> applicantsList(Long id) { return applicantsRepository.findAllByPostid(id); }
 
     // 인증
     public void authentication(Long id, String credential){

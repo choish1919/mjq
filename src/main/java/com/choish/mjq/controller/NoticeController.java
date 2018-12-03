@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -18,13 +17,13 @@ public class NoticeController {
 
     // 모든 공지사항 리스트를 반환
     @GetMapping("/all")
-    public List<Notices> noticesList(){
+    public Iterable<Notices> noticesList(){
         return noticeService.noticeList();
     }
 
     // 해당 페이지, size 만큼 반환
     @GetMapping
-    public List<Notices> postPage(@RequestParam int page, int size){
+    public Iterable<Notices> postPage(@RequestParam int page, int size){
         PageRequest pageRequest = PageRequest.of(page, size);
         return noticeService.noticePage(pageRequest);
     }

@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class NoticeService {
@@ -19,12 +17,12 @@ public class NoticeService {
     public Notices noticeWrite(NoticesCreateRequestDto dto) { return noticesRepository.save(dto.toEntity());}
 
     // 모든 공지사항 리스트를 반환
-    public List<Notices> noticeList(){
+    public Iterable<Notices> noticeList(){
         return noticesRepository.findAllByOrderByIdDesc();
     }
 
     // 해당 페이지 반환
-    public List<Notices> noticePage(PageRequest pageRequest){
+    public Iterable<Notices> noticePage(PageRequest pageRequest){
         Page<Notices> noticesPage = noticesRepository.findAllByOrderByIdDesc(pageRequest);
         return noticesPage.getContent();
     }

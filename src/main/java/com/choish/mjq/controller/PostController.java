@@ -1,16 +1,15 @@
 package com.choish.mjq.controller;
 
+import com.choish.mjq.domain.applicants.Applicants;
 import com.choish.mjq.domain.posts.Posts;
+import com.choish.mjq.dto.applicants.ApplicantsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsCreateRequestDto;
 import com.choish.mjq.dto.posts.PostsUpdateRequestDto;
 import com.choish.mjq.exception.UnauthorizedException;
 import com.choish.mjq.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +25,14 @@ public class PostController {
         return postService.postWrite(dto);
     }
 
+    // 해당 게시물 모집 신청
+    @PostMapping("/apply")
+    public Applicants apply(@RequestBody ApplicantsCreateRequestDto dto){
+        if(dto.getApplicantsid() == null || dto.getAuthorid() == null || dto.getAuthorid() == null)
+            throw new UnauthorizedException("DTO가 유효하지 않습니다. 다음 중 NULL 값이 존재하면 안됩니다.: " + dto.toString());
+       return postService.apply(dto);
+    }
+
     // 모든 게시물 리스트를 반환
     @GetMapping("/all")
     public Iterable<Posts> postList(){
@@ -34,7 +41,7 @@ public class PostController {
 
     // 해당 페이지, size 만큼 반환
     @GetMapping
-    public List<Posts> postPage(@RequestParam int page, int size){
+    public Iterable<Posts> postPage(@RequestParam int page, int size){
         PageRequest pageRequest = PageRequest.of(page, size);
         return postService.postPage(pageRequest);
     }
@@ -44,6 +51,10 @@ public class PostController {
     public Posts findById(@PathVariable Long id){
         return postService.findPostById(id);
     }
+
+    // 해당 ID의 신청자 리스트를 반환
+    @GetMapping(value = "/{id}/applicants")
+    public Iterable<Applicants> applicantsList(@PathVariable Long id) { return postService.applicantsList(id);}
 
     // 해당 게시물 수정
     @PutMapping(value = "/{id}")

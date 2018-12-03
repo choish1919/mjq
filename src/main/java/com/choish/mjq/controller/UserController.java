@@ -2,9 +2,11 @@ package com.choish.mjq.controller;
 
 import com.choish.mjq.domain.emails.Emails;
 import com.choish.mjq.domain.emails.EmailsRepository;
+import com.choish.mjq.domain.matchings.Matchings;
 import com.choish.mjq.domain.users.UserRepository;
 import com.choish.mjq.domain.users.Users;
 import com.choish.mjq.dto.emails.EmailsSaveRequestDto;
+import com.choish.mjq.dto.matchings.MatchingsSaveRequestDto;
 import com.choish.mjq.dto.users.UsersCreateRequestDto;
 import com.choish.mjq.exception.AlreadyExistsException;
 import com.choish.mjq.exception.UnauthorizedException;
@@ -97,6 +99,18 @@ public class UserController {
     public Users findById(@PathVariable Long id){
         return userService.findById(id);
     }
+
+    // 작성자가 applicants를 수락
+    @PostMapping("/accept")
+    public Matchings accept(@RequestBody MatchingsSaveRequestDto dto){
+        if(dto.getApplicantsid() == null || dto.getAuthorid() == null || dto.getPostid() == null)
+            throw new UnauthorizedException("DTO가 유효하지 않습니다. 다음 중 NULL 값이 존재하면 안됩니다.: " + dto.toString());
+        return userService.accept(dto);
+    }
+
+    // 작성자 매칭 리스트 반환
+    @GetMapping(value = "/{id}/matching")
+    public Iterable<Matchings> matchingsList(@PathVariable Long id){ return userService.matchingsList(id); }
 
     // 정보 수정
     //@PutMapping
